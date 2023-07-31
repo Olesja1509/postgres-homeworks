@@ -5,9 +5,7 @@ SELECT company_name as customer, CONCAT(employees.first_name || ' ' || employees
 FROM customers
 JOIN employees USING(city)
 JOIN orders USING(customer_id, employee_id)
-WHERE city = 'London' AND orders.ship_via IN (SELECT shipper_id
-											  FROM shippers
-											  WHERE shipper_id=2)
+WHERE city = 'London' AND orders.ship_via IN (SELECT shipper_id FROM shippers WHERE shipper_id=2)
 
 -- 2. Наименование продукта, количество товара (product_name и units_in_stock в табл products),
 -- имя поставщика и его телефон (contact_name и phone в табл suppliers) для таких продуктов,
@@ -16,9 +14,7 @@ WHERE city = 'London' AND orders.ship_via IN (SELECT shipper_id
 SELECT product_name, units_in_stock, contact_name, phone
 FROM products
 JOIN suppliers USING(supplier_id)
-WHERE discontinued=0 AND units_in_stock < 25 AND category_id IN(SELECT category_id
-															   FROM categories
-															   WHERE category_name='Dairy Products' OR category_name='Condiments')
+WHERE discontinued=0 AND units_in_stock < 25 AND category_id IN(SELECT category_id FROM categories WHERE category_name='Dairy Products' OR category_name='Condiments')
 ORDER BY units_in_stock
 
 -- 3. Список компаний заказчиков (company_name из табл customers), не сделавших ни одного заказа
@@ -30,6 +26,4 @@ WHERE NOT EXISTS (SELECT * FROM orders WHERE customers.customer_id=orders.custom
 -- Этот запрос написать именно с использованием подзапроса.
 SELECT product_name
 FROM products
-WHERE product_id IN (SELECT product_id
-					FROM order_details
-					WHERE quantity=10)
+WHERE product_id IN (SELECT product_id FROM order_details WHERE quantity=10)
